@@ -4,10 +4,78 @@ import java.util.*;
 
 public class LongestCommonSubsequence {
     public static void main(String[] args) {
-        String s1 = "ABCAB";
-        String s2 = "AECB";
+        //String s2 = "AGGTAB";
+        //String s1 = "GXTXAYB";
+        String s1 = "cab";
+        String s2 = "abac";
 
-        System.out.println(lcsBottomUpSpaceOptimization(s1, s2));
+        System.out.println(lcsStringBottomUp(s1, s2));
+    }
+    public static String lcsStringBottomUp(String s1, String s2) {
+        int n = s1.length();
+        int m = s2.length();
+        int[][] dp = new int[n+1][m+1];
+        StringBuilder sb = new StringBuilder();
+        for(int i=1;i<=n;i++) {
+            for(int j=1;j<=m;j++) {
+                if(s1.charAt(i-1) == s2.charAt(j-1)) {
+                    dp[i][j] = dp[i-1][j-1] + 1;
+                }
+                else {
+                    dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
+                }
+            }
+        }
+        int i = n;
+        int j = m;
+        ArrayList<Integer> lcsIndicesI = new ArrayList<>();
+        ArrayList<Integer> lcsIndicesJ = new ArrayList<>();
+        while(i>0 && j > 0) {
+            if(s1.charAt(i-1) == s2.charAt(j-1)) {
+                sb.insert(0, s1.charAt(i - 1));
+                lcsIndicesI.add(0,i-1);
+                lcsIndicesJ.add(0,j-1);
+                i--;
+                j--;
+            }
+            else {
+                if(dp[i][j] == dp[i-1][j]) {
+                    i--;
+                }
+                else if(dp[i][j] == dp[i][j-1]) {
+                    j--;
+                }
+                else {
+
+                }
+            }
+        }
+        StringBuilder ans = new StringBuilder();
+        ans.append(s2);
+
+        int prev = 0;
+        for(int k=0; k<lcsIndicesI.size();k++) {
+            int end = lcsIndicesI.get(k);
+            StringBuilder tmp = new StringBuilder();
+            for(int l=prev;l<end;l++) {
+                tmp.append(s1.charAt(l));
+            }
+
+            if(!tmp.isEmpty()) {
+                ans.insert(lcsIndicesJ.get(k), tmp.toString());
+            }
+            //System.out.println("AAA"+lcsIndicesJ.get(k)+"AAA");
+            int p = k;
+            while(p<lcsIndicesJ.size()-1) {
+                lcsIndicesJ.set(p + 1, lcsIndicesJ.get(p + 1) + tmp.length());
+                p++;
+                //System.out.println(lcsIndicesJ);
+            }
+            prev = end+1;
+        }
+        //System.out.println(lcsIndicesI);
+        //System.out.println(lcsIndicesJ);
+        return ans.toString();
     }
     public static int lcsBottomUpSpaceOptimization(String s1, String s2) {
         int n = s1.length();
