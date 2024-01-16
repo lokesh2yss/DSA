@@ -11,7 +11,7 @@ public class QueueUsingOneStack {
         stack.push(data);
     }
     public int dequeue() {
-        if(stack.size() ==0) {
+        if(stack.isEmpty()) {
             return -1;
         }
         if(stack.size()==1) {

@@ -1,6 +1,27 @@
 package queue;
 import java.util.*;
 public class ReverseQueue {
+    public static Queue<Integer> reverseQueueFirstKElementsBetter(int k, Queue<Integer> queue) {
+        int n = queue.size();
+        ArrayDeque<Integer> stack = new ArrayDeque<>();
+        for(int i=0;i<k;i++) {
+            if(!queue.isEmpty()) {
+                stack.push(queue.poll());
+            }
+        }
+        for(int i=0;i<k;i++) {
+            if(!stack.isEmpty()) {
+                queue.offer(stack.pop());
+            }
+        }
+
+        for(int i=0;i<n-k;i++) {
+            if(!queue.isEmpty()) {
+                queue.offer(queue.poll());
+            }
+        }
+        return queue;
+    }
     public static Queue<Integer> reverseQueueFirstKElements(int k, Queue<Integer> queue) {
         Stack<Integer> st = new Stack<>();
         //move the first k elements into the stack

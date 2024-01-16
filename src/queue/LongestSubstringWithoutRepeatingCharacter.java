@@ -2,29 +2,29 @@ package queue;
 import java.util.*;
 public class LongestSubstringWithoutRepeatingCharacter {
     public int lengthOfLongestSubstring(String s) {
-        char[] c = s.toCharArray();
+        int n = s.length();
+        if(n==0) return 0;
         boolean[] state = new boolean[256];
-        Queue<Character> q = new LinkedList();
-        int max = 0;
-        char head;
-        for (int i = 0; i < c.length; i++) {
-            if (state[c[i]] == true) {
-                if (q.size() > max) {
-                    max = q.size();
-                }
-                do {
-                    head = q.poll();
-                    state[head] = false;
-                } while (head != c[i]);
+        Queue<Character> q = new LinkedList<>();
+        int maxLength = 1;
+        for(int i=0;i<n;i++) {
+            char c = s.charAt(i);
+            q.offer(c);
+            if(state[c] == false) {
+                state[c] = true;
             }
-            q.offer(c[i]);
-            state[c[i]] = true;
+            else {
+                maxLength = Math.max(maxLength, q.size()-1);
+                while(!q.isEmpty() && q.peek() != c) {
+                    state[q.peek()] = false;
+                    q.poll();
+                }
+                q.poll();
+            }
         }
-        if (q.size() > max) {
-            max = q.size();
+        if(q.size() > maxLength) {
+            maxLength = q.size();
         }
-        return max;
-
-
+        return maxLength;
     }
 }
